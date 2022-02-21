@@ -18,10 +18,13 @@ public class PlayerController : MonoBehaviour
         maxSpeed,
         thrustAmount;
 
+    /* THRUST - not yet impletmented
     private string
         thrustDirection,
         lastThrustDirection;
+    */
 
+    // Directions are currently not used, but will be integrated later to orient character sprites and particle effects
     private string[] direction = { "up", "upright", "right", "downright", "down", "downleft", "left", "upleft", "neutral" };
     
     // Start is called before the first frame update
@@ -34,12 +37,15 @@ public class PlayerController : MonoBehaviour
 
         playerFacing = "neutral";
 
+        /* THRUST - not yet impletmented
         // Thrust is a quick acceleration that happens when the player changes directions
         thrustAmount = 0.0f;
         thrustDirection = "initial";
         lastThrustDirection = "null";
+        */
     }
 
+    // Function determines which direction the player is facing
     string getDirection(float horizontalMovement, float verticalMovement)
     {
         bool isFacingVertical = false;
@@ -63,7 +69,7 @@ public class PlayerController : MonoBehaviour
                 isFacingUp = true;
         }
 
-        // Not sure if we want to include a neutral position while skating, we'll see
+        // Neutral position while skating - optional, probably will not use. Included here just in case
         /*
         if (isFacingHorizontal == false && isFacingVertical == false)
             return "neutral";
@@ -116,8 +122,18 @@ public class PlayerController : MonoBehaviour
             verticalSpeed += slowAmount * (Mathf.Abs(verticalSpeed) / maxSpeed);
         
     }
-    
-    
+
+
+    // THRUST - not yet impletmented
+
+    // Thrust is a work in progress. It is meant to be a system where pressing a direction
+    // button (that is different from the last one) will cause quick acceleration.
+    // In other words, you can hold 'up' to go decently fast, but you'll go even faster
+    // by if you also alternate pressing left-right-left-right at the same time.
+    // The goal is to simulate kicking your feet to accelerate,
+    // but I haven't quite figured out how to accomplish it.
+
+    /*
     void determineThrust()
     {
         thrustDirection = getDirection(horizontalInput, verticalInput);
@@ -135,17 +151,20 @@ public class PlayerController : MonoBehaviour
             thrustAmount = 0.0f;
         }
     }
-    
+    */
 
+    // Player input detected in fixedupdate so it is standardized
     void FixedUpdate()
     {
         // Player Input
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
 
+        /* THRUST - not yet impletmented
         // See if they've changed directions
         if (horizontalInput != 0 && verticalInput != 0)
             determineThrust();
+        */
 
         // Calculate speed
 
@@ -179,19 +198,10 @@ public class PlayerController : MonoBehaviour
         thrustAmount = 0.0f;
     }
     
-    // Update is called once per frame
+    // Actual movement rendered in update to appear smooth
     void Update()
     {
         transform.Translate(Vector3.forward * Time.deltaTime * verticalSpeed * speedMultiplier);
         transform.Translate(Vector3.right * Time.deltaTime * horizontalSpeed * speedMultiplier);
-
-        //int test = -1;
-        //print(Mathf.Abs(test));
-        /*
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
-        transform.Translate(Vector3.forward * Time.deltaTime * 25.0f * verticalInput);
-        transform.Translate(Vector3.right * Time.deltaTime * 25.0f * horizontalInput);
-        */
     }
 }
